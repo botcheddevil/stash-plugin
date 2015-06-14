@@ -17,10 +17,9 @@ public class MyPreReceiveRepositoryHook implements PreReceiveRepositoryHook
 
         hookResponse.err().println("Size of collection " + refChanges.size());
 
-
 	    while(itr.hasNext()) {
-	         RefChange rc = (RefChange)itr.next();
-	         System.out.print(rc.getToHash() + " " + "commit");
+	        RefChange rc = (RefChange)itr.next();
+	        hookResponse.err().println(rc.getToHash() + " " + "commit");
 	    }
 
         hookResponse.err().println("Just cant commit");
