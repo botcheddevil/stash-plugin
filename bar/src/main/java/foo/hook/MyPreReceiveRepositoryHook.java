@@ -31,11 +31,12 @@ public class MyPreReceiveRepositoryHook implements PreReceiveRepositoryHook
 			        .include(rc.getToHash())
 			        .build();
 			final Page<Changeset> cs = commitService.getChangesetsBetween(request, PageUtils.newRequest(0, 9999));
-			for(Changeset changeset: cs.getValues())
-			{
-			    hookResponse.err().println(changeset.getMessage() + " " + " to commit");
+			if (cs != null) {
+				for(Changeset changeset: cs.getValues())
+				{
+				    hookResponse.err().println(changeset.getMessage() + " " + " to commit");
+				}
 			}
-
 	        hookResponse.err().println(rc.getToHash() + " " + " to commit");
 	        hookResponse.err().println(rc.getRefId() + " " + " Ref ID");
 	        hookResponse.err().println(rc.getFromHash() + " " + " from commit");
