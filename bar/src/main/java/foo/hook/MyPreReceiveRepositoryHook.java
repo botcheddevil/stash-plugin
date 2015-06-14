@@ -20,29 +20,35 @@ public class MyPreReceiveRepositoryHook implements PreReceiveRepositoryHook
     @Override
     public boolean onReceive(RepositoryHookContext context, Collection<RefChange> refChanges, HookResponse hookResponse)
     {
-        Iterator itr =  refChanges.iterator();
-        hookResponse.err().println("Size of collection " + refChanges.size());
+    	try {
+	        Iterator itr =  refChanges.iterator();
+	        hookResponse.err().println("Size of collection " + refChanges.size());
 
-	    while(itr.hasNext()) {
-	        RefChange rc = (RefChange)itr.next();
+		    while(itr.hasNext()) {
+		        RefChange rc = (RefChange)itr.next();
 
-			final ChangesetsBetweenRequest request = new ChangesetsBetweenRequest.Builder(context.getRepository())
-			        .exclude(rc.getFromHash())
-			        .include(rc.getToHash())
-			        .build();
-			final Page<Changeset> cs = commitService.getChangesetsBetween(request, PageUtils.newRequest(0, 9999));
-			if (cs != null) {
-				for(Changeset changeset: cs.getValues())
-				{
-				    hookResponse.err().println(changeset.getMessage() + " " + " to commit");
+				final ChangesetsBetweenRequest request = new ChangesetsBetweenRequest.Builder(context.getRepository())
+				        .exclude(rc.getFromHash())
+				        .include(rc.getToHash())
+				        .build();
+				final Page<Changeset> cs = commitService.getChangesetsBetween(request, PageUtils.newRequest(0, 9999));
+				if (cs != null) {
+					for(Changeset changeset: cs.getValues())
+					{
+					    hookResponse.err().println(changeset.getMessage() + " " + " to commit");
+					}
 				}
-			}
-	        hookResponse.err().println(rc.getToHash() + " " + " to commit");
-	        hookResponse.err().println(rc.getRefId() + " " + " Ref ID");
-	        hookResponse.err().println(rc.getFromHash() + " " + " from commit");
+		        hookResponse.err().println(rc.getToHash() + " " + " to commit");
+		        hookResponse.err().println(rc.getRefId() + " " + " Ref ID");
+		        hookResponse.err().println(rc.getFromHash() + " " + " from commit");
+		    }
+
+	        hookResponse.err().println("Just cant commit");
+	    } catch (Exception e) {
+	    	hookResponse.err().println("An error was encountered");
+	    	hookResponse.err().println(e.getMessage());
 	    }
 
-        hookResponse.err().println("Just cant commit");
-        return true;
+	    return false;
     }
 }
