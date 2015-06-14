@@ -19,7 +19,8 @@ public class MyPreReceiveRepositoryHook implements PreReceiveRepositoryHook
 
 	    while(itr.hasNext()) {
 	        RefChange rc = (RefChange)itr.next();
-	        hookResponse.err().println(rc.getToHash() + " " + "commit");
+	        hookResponse.err().println(rc.getToHash() + " " + " to commit");
+	        hookResponse.err().println(rc.getFromHash() + " " + " from commit");
 	    }
 
         hookResponse.err().println("Just cant commit");
